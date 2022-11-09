@@ -16,6 +16,7 @@ $ ./configure
 ```
 $ wget https://boostorg.jfrog.io/artifactory/main/release/1.80.0/source/boost_1_80_0.tar.gz
 $ tar -xvzf boost_1_80_0.tar.gz
-$ ./bootstrap.sh
+$ ./bootstrap.sh    # note that I directly write this library under QuadraticSieve directory
+                    # if you do it somewhere else, please change cpp/Makefile accordingly
 $ ./b2 install
 ```

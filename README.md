@@ -16,4 +16,6 @@ $ ./configure
 ```
 $ wget https://boostorg.jfrog.io/artifactory/main/release/1.80.0/source/boost_1_80_0.tar.gz
 $ tar -xvzf boost_1_80_0.tar.gz
+$ ./bootstrap.sh
+$ ./b2 install
 ```

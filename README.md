@@ -1,6 +1,6 @@
 # Quadratic Sieve
 ## Environmental Settings (in Linux System)
-* GMP is required to run the files. To install GMP, please do:
+* GMP is required to run the files (see [details](https://gmplib.org/)). To install GMP, please do:
 ```
 $ sudo apt-get update
 $ sudo apt-get install g++

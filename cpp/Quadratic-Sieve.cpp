@@ -7,7 +7,7 @@
 
 using namespace std;
 
-const uint64_t SIEVE_CHUNK = 65536;  // 4294967296;  // 2^32 -- the size of the chunk we sieve at a time //65536;
+const uint64_t SIEVE_CHUNK = 65536;  // 2^16 -- the size of the chunk we sieve at a time
 
 // modular exponentiation using the right-to-left binary method
 uint64_t pow_mod(uint64_t a, uint64_t b, uint64_t m) {

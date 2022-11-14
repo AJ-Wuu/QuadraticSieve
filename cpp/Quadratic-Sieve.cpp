@@ -7,7 +7,7 @@
 
 using namespace std;
 
-const uint64_t SIEVE_CHUNK = 65536;  // 2^16 -- the size of the chunk we sieve at a time
+const uint64_t SIEVE_CHUNK = 65536;  // 4294967296;  // 2^32 -- the size of the chunk we sieve at a time //65536;
 
 // modular exponentiation using the right-to-left binary method
 uint64_t pow_mod(uint64_t a, uint64_t b, uint64_t m) {
@@ -71,6 +71,8 @@ void tonelli_shanks(uint64_t n, uint64_t p, uint64_t *result) {
 
 // get the ith bit in row
 inline int64_t get_bit(uint64_t i, uint64_t *row) {
+    // std::cout << (boost::multiprecision::uint256_t)i / 32 << endl;
+    // std::cout << (boost::multiprecision::uint256_t)i % 32 << endl;
     return (row[i / sizeof(uint64_t)] & (1 << (i % sizeof(uint64_t)))) != 0;
 }
 
@@ -94,12 +96,11 @@ mpz_class quadratic_sieve(mpz_class &N) {
     vector<uint64_t> factor_base;
     mpz_class sqrt_N = sqrt(N);
 
-    // 1 - Initialization
-    // 1.1 pick the smoothness bound
+    // get smoothness bound
     double log_N = mpz_sizeinbase(N.get_mpz_t(), 2) * log(2);
     uint64_t B = (uint64_t)ceil(exp(0.56 * sqrt(log_N * log(log_N)))) + 300;
 
-    // 1.2 generate the factor base using a sieve: set p0 = 2, find odd primes p2 < p3 < ... < pK = p <= B
+    // generate the factor base using a sieve
     char *sieve = new char[B + 1];
     memset(sieve, 1, B + 1);
     for (unsigned long p = 2; p <= B; ++p) {
@@ -117,7 +118,6 @@ mpz_class quadratic_sieve(mpz_class &N) {
     }
     delete[] sieve;
 
-    // 2 - Sieving
     vector<uint64_t> X;
     double *Y = new double[SIEVE_CHUNK];
     vector<vector<uint64_t>> smooth;
@@ -130,7 +130,7 @@ mpz_class quadratic_sieve(mpz_class &N) {
     fb_indexes[0] = new uint64_t[factor_base.size()];
     fb_indexes[1] = new uint64_t[factor_base.size()];
     for (uint64_t p = 0; p < factor_base.size(); ++p) {
-        // 1.3 find the solutions to x^2 = n (mod p)
+        // solve the congruence x^2 = n (mod p)
         uint64_t idxs[2];
         mpz_class temp = N % mpz_class(factor_base[p]);
         tonelli_shanks(temp.get_ui(), factor_base[p], idxs);
@@ -215,14 +215,16 @@ mpz_class quadratic_sieve(mpz_class &N) {
         max_x += SIEVE_CHUNK;
     }
 
-    // 3 - Linear Algebra
-    // 3.1 form the matrix
     uint64_t **matrix = new uint64_t *[factor_base.size()];
-    int row_words = (smooth.size() + sizeof(uint64_t)) / sizeof(uint64_t);  // the amount of words needed to accomodate a row in the augmented matrix
+
+    // the amount of words needed to accomodate a row in the augmented matrix
+    int row_words = (smooth.size() + sizeof(uint64_t)) / sizeof(uint64_t);
+
     for (uint64_t i = 0; i < factor_base.size(); ++i) {
         matrix[i] = new uint64_t[row_words];
         memset(matrix[i], 0, row_words * sizeof(uint64_t));
     }
+
     for (uint64_t s = 0; s < smooth.size(); ++s) {
         // for each factor in the smooth number, add the factor to the corresponding element in the matrix
         for (uint64_t p = 0; p < smooth[s].size(); ++p) {
@@ -230,8 +232,8 @@ mpz_class quadratic_sieve(mpz_class &N) {
         }
     }
 
-    // 3.2 solve λM = 0 (mod 2) where λ = (λ1, λ2, ..., λ(K+2))
-    // Gauss elimination, the dimension of the augmented matrix is factor_base.size() * (smooth.size() + 1)
+    // Gauss elimination
+    // the dimension of the augmented matrix is factor_base.size() x (smooth.size() + 1)
     uint64_t i = 0, j = 0;
     while (i < factor_base.size() && j < (smooth.size() + 1)) {
         uint64_t maxi = i;
@@ -257,19 +259,20 @@ mpz_class quadratic_sieve(mpz_class &N) {
         ++j;
     }
 
-    mpz_class a, b;
-    uint64_t **back_matrix = new uint64_t *[factor_base.size()];  // copy of matrix that to perform back-substitution on
+    mpz_class a;
+    mpz_class b;
+
+    // copy of matrix that to perform back-substitution on
+    uint64_t **back_matrix = new uint64_t *[factor_base.size()];
     for (uint64_t i = 0; i < factor_base.size(); ++i) {
         back_matrix[i] = new uint64_t[row_words];
     }
 
-    // 4 - Factorization
-    // 4.1 compute x = x1^λ1 * x2^λ2 * ... * x(K+2)^λ(K+2) mod n and y mod n
     uint64_t *x = new uint64_t[smooth.size()];
     uint64_t *combination = new uint64_t[factor_base.size()];
     // loop until found a non-trivial factor
     do {
-        // copy the Gauss eliminated matrix
+        // copy the gauss eliminated matrix
         for (uint64_t i = 0; i < factor_base.size(); ++i) {
             memcpy(back_matrix[i], matrix[i], row_words * sizeof(uint64_t));
         }
@@ -313,8 +316,11 @@ mpz_class quadratic_sieve(mpz_class &N) {
             }
         }
 
-        a = 1, b = 1;
-        memset(combination, 0, sizeof(uint64_t) * factor_base.size());  // combine the factor base to get square
+        a = 1;
+        b = 1;
+
+        // combine the factor base to get square
+        memset(combination, 0, sizeof(uint64_t) * factor_base.size());
         for (uint64_t i = 0; i < smooth.size(); ++i) {
             if (x[i] == 1) {
                 for (uint64_t p = 0; p < smooth[i].size(); ++p) {
@@ -332,7 +338,6 @@ mpz_class quadratic_sieve(mpz_class &N) {
     } while (a % N == b % N || a % N == (-b) % N + N);  // if a = +/- b (mod N) -> found a trivial factor, run the loop again to find a new a and b
     b -= a;
 
-    // 4.2 compute m = gcd(x - y, n)
     mpz_class factor;
     mpz_gcd(factor.get_mpz_t(), b.get_mpz_t(), N.get_mpz_t());
     for (uint64_t i = 0; i < factor_base.size(); ++i) {
@@ -351,3 +356,4 @@ mpz_class quadratic_sieve(mpz_class &N) {
 
     return factor;
 }
+

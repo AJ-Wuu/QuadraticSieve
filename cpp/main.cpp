@@ -59,9 +59,10 @@ int main(int argc, char** argv) {
     }
 
     cout << result.at(0) << " = ";
-    for (int i = 1; i < result.size() - 1; i++) {
+    for (unsigned int i = 1; i < result.size() - 1; i++) {
         cout << result.at(i) << " * ";
     }
     cout << result.at(result.size() - 1) << endl;
 }
+
 

@@ -1,5 +1,5 @@
 quadratic_sieve_cpp: main.cpp Quadratic-Sieve.cpp
-	g++ main.cpp Quadratic-Sieve.cpp -O2 -lgmp -lgmpxx -o quadratic_sieve_cpp
+	g++ main.cpp Quadratic-Sieve.cpp -Wall -O2 -std=c++17 -lgmp -lgmpxx -o quadratic_sieve_cpp
 	#g++ -I ../boost_1_80_0 main.cpp Quadratic-Sieve.cpp -O2 -lgmp -lgmpxx -o quadratic_sieve_cpp ~/QuadraticSieve/boost_1_80_0/boost/multiprecision/cpp_int.hpp
 
 clean:
@@ -34,3 +34,4 @@ test: quadratic_sieve_cpp
 
 time:
 	time make test
+

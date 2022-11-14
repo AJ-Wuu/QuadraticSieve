@@ -6,3 +6,4 @@
 mpz_class quadratic_sieve(mpz_class &N);
 
 #endif
+

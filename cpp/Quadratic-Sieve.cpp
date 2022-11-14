@@ -1,7 +1,4 @@
 #include "Quadratic-Sieve.h"
-
-#include <gmpxx.h>
-
 #include <cmath>
 #include <cstdlib>
 #include <iostream>

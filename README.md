@@ -12,6 +12,7 @@ $ cd gmp-6.2.1
 $ make
 $ ./configure
 ```
+* NTL Library is also required (see [official page](https://libntl.org/))
 * Boost Library is also required (see [documents](https://www.boost.org/doc/libs/1_39_0/more/getting_started/unix-variants.html) and [downloads](https://www.boost.org/users/download/)). To install it, please do:
 ```
 $ wget https://boostorg.jfrog.io/artifactory/main/release/1.80.0/source/boost_1_80_0.tar.gz

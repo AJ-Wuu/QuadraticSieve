@@ -1,19 +1,26 @@
 #include "Quadratic-Sieve.h"
 #include <gmpxx.h>
+#include <chrono>
 #include <cstdlib>
 #include <iostream>
 #include <stack>
 #include <vector>
 
 using namespace std;
+using std::chrono::duration;
+using std::chrono::high_resolution_clock;
 
 int main(int argc, char** argv) {
+    // timer
+    high_resolution_clock::time_point start, end;
+    start = high_resolution_clock::now();
+
     mpz_class N(argv[1]);  // read from command line
 
     // Quadratic Sieve is the fastest for integers up to 100 digits
-    // hence, this implementation only takes care of the input less than or equal to 100 digits
-    if (mpz_sizeinbase(N.get_mpz_t(), 10) > 100) {
-        cerr << N << " is over 100 digits\n" << endl;
+    // However, this implementation only takes care of the input less than or equal to 40 digits
+    if (mpz_sizeinbase(N.get_mpz_t(), 10) > 40) {
+        cerr << N << " is over 40 digits\n" << endl;
         return 0;
     }
 
@@ -57,12 +64,13 @@ int main(int argc, char** argv) {
            }
         }
     }
+    end = high_resolution_clock::now();
 
     cout << result.at(0) << " = ";
     for (unsigned int i = 1; i < result.size() - 1; i++) {
         cout << result.at(i) << " * ";
     }
     cout << result.at(result.size() - 1) << endl;
+    cout << "time spent: " << std::chrono::duration_cast<duration<double, std::milli>>(end - start).count() << "ms" << endl;
 }
-
 

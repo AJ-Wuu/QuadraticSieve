@@ -1,7 +1,7 @@
 # Quadratic Sieve
 ## Environmental Settings (in Linux System)
 * GMP is needed to run the files (see [details](https://gmplib.org/)), and NTL Library is also needed (see [official page](https://libntl.org/))
-### (OPTIONAL) if you are on your personal computer (i.e., you can act as admin), you may do the updates
+### (OPTIONAL) Updates -- if you are on your personal computer (i.e., you can act as admin), you may do so
 ```bash
 $ sudo apt-get update
 $ sudo apt-get install g++

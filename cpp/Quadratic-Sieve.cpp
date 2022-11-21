@@ -238,7 +238,7 @@ mpz_class quadratic_sieve(mpz_class &N) {
     while (i < factor_base.size() && j < (smooth.size() + 1)) {
         uint64_t maxi = i;
 
-        // Find pivot element.
+        // find pivot element
         for (uint64_t k = i + 1; k < factor_base.size(); ++k) {
             if (get_bit(j, matrix[k]) == 1) {
                 maxi = k;

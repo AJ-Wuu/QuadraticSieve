@@ -27,7 +27,6 @@ int64_t legendre_symbol(uint64_t a, uint64_t p) {
     return t > 1 ? -1 : t;
 }
 
-// solve the congruence x^2 = n (mod p)
 // reference: https://rosettacode.org/wiki/Tonelli-Shanks_algorithm
 void tonelli_shanks(uint64_t n, uint64_t p, uint64_t *result) {
     if (p == 2) {
@@ -250,8 +249,9 @@ mpz_class quadratic_sieve(mpz_class &N) {
 
             for (uint64_t u = i + 1; u < factor_base.size(); ++u) {
                 if (get_bit(j, matrix[u]) == 1) {
-                    for (int64_t w = 0; w < row_words; ++w)
+                    for (int64_t w = 0; w < row_words; ++w) {
                         matrix[u][w] ^= matrix[i][w];
+		    }
                 }
             }
             ++i;

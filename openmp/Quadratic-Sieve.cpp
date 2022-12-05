@@ -93,8 +93,8 @@ inline void toggle_bit(uint64_t i, uint64_t *row) {
 }
 
 // reference: http://www.personal.psu.edu/rcv4/467qs1.pdf
-mpz_class quadratic_sieve(mpz_class &N) {
-    if (mpz_sizeinbase(N.get_mpz_t(), 10) >= 22 && mpz_sizeinbase(N.get_mpz_t(), 10) <= 37) {
+mpz_class quadratic_sieve(mpz_class &N, int digits) {
+    if (digits >= 22 && digits <= 37) {
         omp_set_num_threads(4);
     }
     else {

@@ -3,7 +3,7 @@
 
 #include <gmpxx.h>
 
-mpz_class quadratic_sieve(mpz_class &N);
+mpz_class quadratic_sieve(mpz_class &N, int digits);
 
 #endif
 

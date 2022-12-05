@@ -19,7 +19,8 @@ int main(int argc, char** argv) {
         start = high_resolution_clock::now();
         // Quadratic Sieve is the fastest for integers up to 100 digits
         // However, this implementation only takes care of the input less than or equal to 40 digits
-        if (mpz_sizeinbase(N.get_mpz_t(), 10) > 40) {
+        int digits = mpz_sizeinbase(N.get_mpz_t(), 10);
+	if (digits > 40) {
             cerr << N << " is over 40 digits\n" << endl;
             return 0;
         }
@@ -58,7 +59,7 @@ int main(int argc, char** argv) {
                     }
                 }
                 else {
-                    mpz_class f = quadratic_sieve(factor);
+                    mpz_class f = quadratic_sieve(factor, digits);
                     factors.push(f);
                     factors.push(factor / f);
                 }

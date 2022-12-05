@@ -94,7 +94,13 @@ inline void toggle_bit(uint64_t i, uint64_t *row) {
 
 // reference: http://www.personal.psu.edu/rcv4/467qs1.pdf
 mpz_class quadratic_sieve(mpz_class &N) {
-    omp_set_num_threads(2);
+    if (mpz_sizeinbase(N.get_mpz_t(), 10) >= 22 && mpz_sizeinbase(N.get_mpz_t(), 10) <= 37) {
+        omp_set_num_threads(4);
+    }
+    else {
+        omp_set_num_threads(2);
+    }
+
     vector<uint64_t> factor_base;
     mpz_class sqrt_N = sqrt(N);
 

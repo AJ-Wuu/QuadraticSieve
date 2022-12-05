@@ -241,7 +241,8 @@ mpz_class quadratic_sieve(mpz_class &N) {
     // the dimension of the augmented matrix is factor_base.size() x (smooth.size() + 1)
     uint64_t i = 0, j = 0;
     while (i < factor_base.size() && j < (smooth.size() + 1)) {
-        uint64_t maxi = i;
+	uint64_t maxi = i;
+#pragma omp parallel shared(factor_base, smooth, maxi)
 
         // Find pivot element.
         for (uint64_t k = i + 1; k < factor_base.size(); ++k) {
@@ -251,6 +252,7 @@ mpz_class quadratic_sieve(mpz_class &N) {
             }
         }
         if (get_bit(j, matrix[maxi]) == 1) {
+#pragma omp critical
             swap(matrix[i], matrix[maxi]);
 
             for (uint64_t u = i + 1; u < factor_base.size(); ++u) {

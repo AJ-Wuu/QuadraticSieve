@@ -38,3 +38,7 @@ $ cd ../openmp
 $ make
 $ ./quadratic_sieve_openmp < ../generate_input/test.in
 ```
+
+## Performance
+![image](https://user-images.githubusercontent.com/84046974/205717470-fee8319c-7c8c-41c5-a83b-4a41c56689b6.png)
+

@@ -39,6 +39,6 @@ $ make
 $ ./quadratic_sieve_openmp < ../generate_input/test.in
 ```
 
-## Performance
+## Performance (gained by the average of 100 test sets)
 ![image](https://user-images.githubusercontent.com/84046974/205717470-fee8319c-7c8c-41c5-a83b-4a41c56689b6.png)
 
